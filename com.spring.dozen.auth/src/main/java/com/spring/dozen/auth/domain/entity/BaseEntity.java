@@ -44,9 +44,12 @@ public abstract class BaseEntity {
     @Column(name = "deleted_by", length = 20)
     private String deletedBy;
 
-    public void deleteBase(String username) {
+    /**
+     * 도메인 규칙 Long userId를 입력받으면 String 으로 변환해서 deletedBy에 저장
+     * */
+    public void deleteBase(Long userId) {
         this.isDeleted = true;
         this.deletedAt = LocalDateTime.now();
-        this.deletedBy = username;
+        this.deletedBy = String.valueOf(userId);
     }
 }
