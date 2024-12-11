@@ -1,5 +1,6 @@
-package com.spring.dozen.auth.application.dto;
+package com.spring.dozen.auth.presentation.dto;
 
+import com.spring.dozen.auth.application.dto.UserSignUpRequestServiceDto;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
@@ -22,4 +23,7 @@ public record UserSignUpRequestDto(
         @NotBlank
         String role
 ) {
+    public UserSignUpRequestServiceDto toServiceDto() {
+        return new UserSignUpRequestServiceDto(username, password, slackId, role);
+    }
 }

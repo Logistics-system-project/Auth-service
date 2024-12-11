@@ -1,0 +1,45 @@
+### 회원가입: HUB_DELIVERY_STAFF
+
+POST localhost:19091/api/auth/sign-up/hub-delivery-staff
+Content-Type: application/json
+
+{
+  "username": "hubstaff1",
+  "password": "Pass1234!",
+  "slackId": "slackId@slack.com",
+  "role": "HUB_DELIVERY_STAFF"
+}
+
+### 회원가입: COMPANY_DELIVERY_STAFF
+POST localhost:19091/api/auth/sign-up/company-delivery-staff
+Content-Type: application/json
+
+{
+  "username": "comstaff1",
+  "password": "Pass1234!",
+  "slackId": "slackId@slack.com",
+  "role": "COMPANY_DELIVERY_STAFF"
+}
+
+### 회원가입: MASTER 시도 - 실패
+POST localhost:19091/api/auth/sign-up/company-delivery-staff
+Content-Type: application/json
+
+{
+  "username": "masstaff1",
+  "password": "Pass1234!",
+  "slackId": "slackId@slack.com",
+  "role": "MASTER"
+}
+
+### 회원가입: HUB_MANAGER 시도 - 실패
+POST localhost:19091/api/auth/sign-up/company-delivery-staff
+Content-Type: application/json
+
+{
+  "username": "manstaff1",
+  "password": "Pass1234!",
+  "slackId": "slackId@slack.com",
+  "role": "HUB_MANAGER"
+}
+
