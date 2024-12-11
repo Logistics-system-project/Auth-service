@@ -26,4 +26,8 @@ public enum Role {
             default -> null;
         };
     }
+
+    public boolean isNotAvailableRole() {
+        return this == MASTER || this == HUB_MANAGER;
+    }
 }

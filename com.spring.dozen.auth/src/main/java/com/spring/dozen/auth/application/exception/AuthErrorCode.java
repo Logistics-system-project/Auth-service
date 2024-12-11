@@ -18,6 +18,7 @@ public enum AuthErrorCode {
 
     UNSUPPORTED_ROLE(HttpStatus.NOT_FOUND, "존재하지 않는 권한 이름입니다.");
 
+
     private final HttpStatus httpStatus;
     private final String message;
 }

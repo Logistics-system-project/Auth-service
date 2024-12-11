@@ -3,7 +3,6 @@ package com.spring.dozen.auth.application.service;
 import com.spring.dozen.auth.application.dto.UserSignUpRequestDto;
 import com.spring.dozen.auth.application.dto.UserSignUpResponseDto;
 import com.spring.dozen.auth.application.exception.AuthException;
-import com.spring.dozen.auth.domain.entity.User;
 import com.spring.dozen.auth.domain.enums.Role;
 import com.spring.dozen.auth.domain.repository.UserRepository;
 import org.junit.jupiter.api.DisplayName;
@@ -28,21 +27,14 @@ class AuthServiceTest {
     private UserRepository userRepository;
 
     @Test
-    @DisplayName("회원가입 성공")
+    @DisplayName("회원가입 성공 - COMPANY_DELIVERY_STAFF 권한")
     void signUp_Success() {
         // given
         UserSignUpRequestDto request = new UserSignUpRequestDto(
                 "testuser",
                 "password123",
                 "slackId123",
-                "HUB_MANAGER"
-        );
-
-        User savedUser = User.create(
-                request.username(),
-                "encodedPassword",
-                request.slackId(),
-                Role.HUB_MANAGER
+                "COMPANY_DELIVERY_STAFF"
         );
 
         // when
@@ -51,7 +43,27 @@ class AuthServiceTest {
         // then
         assertThat(response).isNotNull();
         assertThat(response.username()).isEqualTo(request.username());
-        assertThat(response.role()).isEqualTo(Role.HUB_MANAGER.name());
+        assertThat(response.role()).isEqualTo(Role.COMPANY_DELIVERY_STAFF.name());
+    }
+
+    @Test
+    @DisplayName("회원가입 성공 - HUB_DELIVERY_STAFF 권한")
+    void signUp_HubDeliveryStaffRole_Success() {
+        // given
+        UserSignUpRequestDto request = new UserSignUpRequestDto(
+                "testuser",
+                "password123",
+                "slackId123",
+                "HUB_DELIVERY_STAFF"
+        );
+
+        // when
+        UserSignUpResponseDto response = authService.signUp(request);
+
+        // then
+        assertThat(response).isNotNull();
+        assertThat(response.username()).isEqualTo(request.username());
+        assertThat(response.role()).isEqualTo(Role.HUB_DELIVERY_STAFF.name());
     }
 
     @Test
@@ -62,7 +74,7 @@ class AuthServiceTest {
                 "testuser",
                 "password123",
                 "slackId123",
-                "HUB_MANAGER"
+                "COMPANY_DELIVERY_STAFF"
         );
 
         // 먼저 동일한 username으로 사용자 생성
@@ -90,4 +102,40 @@ class AuthServiceTest {
                 .isInstanceOf(AuthException.class)
                 .hasMessage("존재하지 않는 권한 이름입니다.");
     }
+
+    @Test
+    @DisplayName("회원가입 실패 - MASTER 권한은 사용할 수 없음")
+    void signUp_MasterRole_ThrowsException() {
+        // given
+        UserSignUpRequestDto request = new UserSignUpRequestDto(
+                "testuser",
+                "password123",
+                "slackId123",
+                "MASTER"
+        );
+
+        // when & then
+        assertThatThrownBy(() -> authService.signUp(request))
+                .isInstanceOf(AuthException.class)
+                .hasMessage("접근 권한이 존재하지 않습니다.");
+    }
+
+    @Test
+    @DisplayName("회원가입 실패 - HUB_MANAGER 권한은 사용할 수 없음")
+    void signUp_HubManagerRole_ThrowsException() {
+        // given
+        UserSignUpRequestDto request = new UserSignUpRequestDto(
+                "testuser",
+                "password123",
+                "slackId123",
+                "HUB_MANAGER"
+        );
+
+        // when & then
+        assertThatThrownBy(() -> authService.signUp(request))
+                .isInstanceOf(AuthException.class)
+                .hasMessage("접근 권한이 존재하지 않습니다.");
+    }
+
+
 }
