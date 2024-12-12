@@ -10,26 +10,12 @@ Content-Type: application/json
   "role": "COMPANY_DELIVERY_STAFF"
 }
 
-
-### 회원가입: MASTER 시도 - 실패
-POST localhost:19091/api/auth/sign-up
+### 로그인
+POST localhost:19091/api/auth/sign-in
 Content-Type: application/json
 
 {
-  "username": "masstaff2",
-  "password": "Pass1234!",
-  "slackId": "slackId@slack.com",
-  "role": "MASTER"
-}
-
-### 회원가입: HUB_MANAGER 시도 - 실패
-POST localhost:19091/api/auth/sign-up
-Content-Type: application/json
-
-{
-  "username": "manstaff2",
-  "password": "Pass1234!",
-  "slackId": "slackId@slack.com",
-  "role": "HUB_MANAGER"
+  "username": "master",
+  "password": "Pass1234!"
 }
 
