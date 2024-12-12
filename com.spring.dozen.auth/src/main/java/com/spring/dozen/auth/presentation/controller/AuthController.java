@@ -4,6 +4,7 @@ import com.spring.dozen.auth.application.dto.UserSignUpResponse;
 import com.spring.dozen.auth.application.service.AuthService;
 import com.spring.dozen.auth.presentation.dto.ApiResponse;
 import com.spring.dozen.auth.presentation.dto.UserSignUpRequest;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -19,8 +20,8 @@ public class AuthController {
 
     private final AuthService authService;
 
-    @PostMapping("/sign-up/")
-    public ApiResponse<UserSignUpResponse> signUp(@RequestBody UserSignUpRequest requestDto) {
+    @PostMapping("/sign-up")
+    public ApiResponse<UserSignUpResponse> signUp(@Valid @RequestBody UserSignUpRequest requestDto) {
         return ApiResponse.success(authService.signUp(requestDto.toServiceDto()));
     }
 
