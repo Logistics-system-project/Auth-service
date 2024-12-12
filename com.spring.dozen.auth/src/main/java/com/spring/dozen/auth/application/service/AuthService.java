@@ -77,4 +77,12 @@ public class AuthService {
 
         return tokenProvider.createAccessToken(user.getId(), user.getRole());
     }
+
+    /**
+     * 회원 존재 여부 검증 비즈니스 로직
+     */
+    public Boolean verifyUser(Long id) {
+        log.info("AuthService.verifyUser.userId: {}", id);
+        return userRepository.findById(id).isPresent();
+    }
 }

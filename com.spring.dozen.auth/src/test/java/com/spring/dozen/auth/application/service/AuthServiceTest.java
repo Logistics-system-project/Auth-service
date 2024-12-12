@@ -197,4 +197,37 @@ class AuthServiceTest {
                 .isInstanceOf(AuthException.class)
                 .hasMessage("유저 ID 또는 비밀번호 정보가 일치하지 않습니다.");
     }
+
+    @Test
+    @DisplayName("회원 존재 여부 검증 - 성공")
+    void verifyUser_Success() {
+        // given
+        UserSignUp request = new UserSignUp(
+                "testuser",
+                "password123",
+                "slackId123",
+                "COMPANY_DELIVERY_STAFF"
+        );
+        UserSignUpResponse response = authService.signUp(request);
+
+        // when
+        Boolean result = authService.verifyUser(response.userId());
+
+        // then
+        assertThat(result).isTrue();
+    }
+
+    @Test
+    @DisplayName("회원 존재 여부 검증 실패 - 존재하지 않는 회원")
+    void verifyUser_UserNotFound() {
+        // given
+        Long nonExistentUserId = 999L;
+
+        // when
+        Boolean result = authService.verifyUser(nonExistentUserId);
+
+        // then
+        assertThat(result).isFalse();
+    }
+
 }

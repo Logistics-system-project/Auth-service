@@ -19,3 +19,6 @@ Content-Type: application/json
   "password": "Pass1234!"
 }
 
+### 회원 존재 여부 검증
+GET localhost:19091/api/auth/verify/999
+Content-Type: application/json
