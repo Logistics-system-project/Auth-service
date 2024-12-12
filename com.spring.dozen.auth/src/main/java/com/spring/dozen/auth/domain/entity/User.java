@@ -37,17 +37,22 @@ public class User extends BaseEntity {
     private Role role;
 
     // 승인 여부
-    @Column(name = "is_approved")
+    @Column(name = "is_approved", nullable = false)
     @ColumnDefault("false")
     private Boolean isApproved;
 
-    public static User create(String username, String password, String slackId, Role role) {
+    public static User create(String username, String password, String slackId, Role role, Boolean isApproved) {
         return User.builder()
                 .username(username)
                 .password(password)
                 .slackId(slackId)
                 .role(role)
+                .isApproved(isApproved)
                 .build();
+    }
+
+    public static User create(String username, String password, String slackId, Role role) {
+        return create(username, password, slackId, role, false);
     }
 }
 
