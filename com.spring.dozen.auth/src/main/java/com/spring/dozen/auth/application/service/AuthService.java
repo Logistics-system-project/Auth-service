@@ -1,7 +1,7 @@
 package com.spring.dozen.auth.application.service;
 
-import com.spring.dozen.auth.application.dto.UserSignUpRequestServiceDto;
-import com.spring.dozen.auth.application.dto.UserSignUpResponseDto;
+import com.spring.dozen.auth.application.dto.UserSignUp;
+import com.spring.dozen.auth.application.dto.UserSignUpResponse;
 import com.spring.dozen.auth.application.exception.AuthErrorCode;
 import com.spring.dozen.auth.application.exception.AuthException;
 import com.spring.dozen.auth.domain.entity.User;
@@ -31,8 +31,8 @@ public class AuthService {
      * @Param role 권한
      */
     @Transactional
-    public UserSignUpResponseDto signUp(UserSignUpRequestServiceDto signUpRequest) {
-        log.info("AuthService.signUp.UserSignUpRequestServiceDto: {}", signUpRequest);
+    public UserSignUpResponse signUp(UserSignUp signUpRequest) {
+        log.info("AuthService.signUp.UserSignUp: {}", signUpRequest);
 
         // username 중복 체크
         if (userRepository.findByUsername(signUpRequest.username()).isPresent()) {
@@ -56,6 +56,6 @@ public class AuthService {
                 passwordEncoder.encode(signUpRequest.password()),
                 signUpRequest.slackId(),
                 role);
-        return UserSignUpResponseDto.from(userRepository.save(user));
+        return UserSignUpResponse.from(userRepository.save(user));
     }
 }

@@ -1,7 +1,7 @@
 package com.spring.dozen.auth.application.service;
 
-import com.spring.dozen.auth.application.dto.UserSignUpRequestServiceDto;
-import com.spring.dozen.auth.application.dto.UserSignUpResponseDto;
+import com.spring.dozen.auth.application.dto.UserSignUp;
+import com.spring.dozen.auth.application.dto.UserSignUpResponse;
 import com.spring.dozen.auth.application.exception.AuthException;
 import com.spring.dozen.auth.domain.enums.Role;
 import com.spring.dozen.auth.domain.repository.UserRepository;
@@ -30,7 +30,7 @@ class AuthServiceTest {
     @DisplayName("회원가입 성공 - COMPANY_DELIVERY_STAFF 권한")
     void signUp_Success() {
         // given
-        UserSignUpRequestServiceDto request = new UserSignUpRequestServiceDto(
+        UserSignUp request = new UserSignUp(
                 "testuser",
                 "password123",
                 "slackId123",
@@ -38,7 +38,7 @@ class AuthServiceTest {
         );
 
         // when
-        UserSignUpResponseDto response = authService.signUp(request);
+        UserSignUpResponse response = authService.signUp(request);
 
         // then
         assertThat(response).isNotNull();
@@ -50,7 +50,7 @@ class AuthServiceTest {
     @DisplayName("회원가입 성공 - HUB_DELIVERY_STAFF 권한")
     void signUp_HubDeliveryStaffRole_Success() {
         // given
-        UserSignUpRequestServiceDto request = new UserSignUpRequestServiceDto(
+        UserSignUp request = new UserSignUp(
                 "testuser",
                 "password123",
                 "slackId123",
@@ -58,7 +58,7 @@ class AuthServiceTest {
         );
 
         // when
-        UserSignUpResponseDto response = authService.signUp(request);
+        UserSignUpResponse response = authService.signUp(request);
 
         // then
         assertThat(response).isNotNull();
@@ -70,7 +70,7 @@ class AuthServiceTest {
     @DisplayName("회원가입 실패 - 중복된 사용자명")
     void signUp_DuplicateUsername_ThrowsException() {
         // given
-        UserSignUpRequestServiceDto request = new UserSignUpRequestServiceDto(
+        UserSignUp request = new UserSignUp(
                 "testuser",
                 "password123",
                 "slackId123",
@@ -90,7 +90,7 @@ class AuthServiceTest {
     @DisplayName("회원가입 실패 - 잘못된 역할")
     void signUp_InvalidRole_ThrowsException() {
         // given
-        UserSignUpRequestServiceDto request = new UserSignUpRequestServiceDto(
+        UserSignUp request = new UserSignUp(
                 "testuser",
                 "password123",
                 "slackId123",
@@ -107,7 +107,7 @@ class AuthServiceTest {
     @DisplayName("회원가입 실패 - MASTER 권한은 사용할 수 없음")
     void signUp_MasterRole_ThrowsException() {
         // given
-        UserSignUpRequestServiceDto request = new UserSignUpRequestServiceDto(
+        UserSignUp request = new UserSignUp(
                 "testuser",
                 "password123",
                 "slackId123",
@@ -124,7 +124,7 @@ class AuthServiceTest {
     @DisplayName("회원가입 실패 - HUB_MANAGER 권한은 사용할 수 없음")
     void signUp_HubManagerRole_ThrowsException() {
         // given
-        UserSignUpRequestServiceDto request = new UserSignUpRequestServiceDto(
+        UserSignUp request = new UserSignUp(
                 "testuser",
                 "password123",
                 "slackId123",

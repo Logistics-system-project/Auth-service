@@ -1,6 +1,6 @@
 package com.spring.dozen.auth.application.dto;
 
-public record UserSignUpRequestServiceDto(
+public record UserSignUp(
         String username,
         String password,
         String slackId,
