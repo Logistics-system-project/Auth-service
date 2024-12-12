@@ -3,6 +3,7 @@ package com.spring.dozen.auth.domain.entity;
 import com.spring.dozen.auth.domain.enums.Role;
 import jakarta.persistence.*;
 import lombok.*;
+import org.hibernate.annotations.ColumnDefault;
 
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -34,6 +35,11 @@ public class User extends BaseEntity {
     @Column(name = "role", nullable = false)
     @Enumerated(EnumType.STRING)
     private Role role;
+
+    // 승인 여부
+    @Column(name = "is_approved")
+    @ColumnDefault("false")
+    private Boolean isApproved;
 
     public static User create(String username, String password, String slackId, Role role) {
         return User.builder()
