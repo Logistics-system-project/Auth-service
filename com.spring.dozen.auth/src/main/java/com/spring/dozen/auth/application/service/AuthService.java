@@ -1,9 +1,11 @@
 package com.spring.dozen.auth.application.service;
 
+import com.spring.dozen.auth.application.dto.UserSignIn;
 import com.spring.dozen.auth.application.dto.UserSignUp;
 import com.spring.dozen.auth.application.dto.UserSignUpResponse;
 import com.spring.dozen.auth.application.exception.AuthErrorCode;
 import com.spring.dozen.auth.application.exception.AuthException;
+import com.spring.dozen.auth.application.interfaces.TokenProvider;
 import com.spring.dozen.auth.domain.entity.User;
 import com.spring.dozen.auth.domain.enums.Role;
 import com.spring.dozen.auth.domain.repository.UserRepository;
@@ -20,15 +22,13 @@ import org.springframework.transaction.annotation.Transactional;
 public class AuthService {
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
+    private final TokenProvider tokenProvider;
 
     /**
      * 사용자 등록 - COMPANY_DELIVERY_STAFF, HUB_DELIVERY_STAFF 전용
      *
-     * @param userId 사용자 ID
      * @return 저장된 사용자
-     * @Param username 사용자명
-     * @Param password 비밀번호
-     * @Param role 권한
+     * @Param UserSignUp - username, password, slackId, role
      */
     @Transactional
     public UserSignUpResponse signUp(UserSignUp signUpRequest) {
@@ -57,5 +57,24 @@ public class AuthService {
                 signUpRequest.slackId(),
                 role);
         return UserSignUpResponse.from(userRepository.save(user));
+    }
+
+
+    /**
+     * 사용자 인증
+     *
+     * @return JWT 액세스 토큰
+     * @Param UserSignIn - username password
+     */
+    public String signIn(UserSignIn signInRequest) {
+        log.info("AuthService.signIn.UserSignIn: {}", signInRequest);
+        User user = userRepository.findByUsername(signInRequest.username())
+                .orElseThrow(() -> new AuthException(AuthErrorCode.USER_NOT_FOUND));
+
+        if (!passwordEncoder.matches(signInRequest.password(), user.getPassword())) {
+            throw new AuthException(AuthErrorCode.INVALID_PASSWORD);
+        }
+
+        return tokenProvider.createAccessToken(user.getId(), user.getRole());
     }
 }
