@@ -22,8 +22,8 @@ jobs:
         with:
           distribution: 'adopt'
           java-version: '17'
-      - name: Test ${{ matrix.service }}
+      - name: Test auth
         run: |
-          cd com.spart.msa_exam.${{ matrix.service }}
+          cd com.spring.dozen.auth
           chmod +x ./gradlew
           ./gradlew clean test
