@@ -27,7 +27,11 @@ public enum Role {
         };
     }
 
-    public boolean isNotAvailableRole() {
+    public boolean isNotDeliveryStaffRole() {
         return this == MASTER || this == HUB_MANAGER;
+    }
+
+    public boolean isNotHubManager() {
+        return this != HUB_MANAGER;
     }
 }

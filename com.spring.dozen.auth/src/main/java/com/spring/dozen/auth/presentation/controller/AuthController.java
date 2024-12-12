@@ -1,6 +1,8 @@
 package com.spring.dozen.auth.presentation.controller;
 
 import com.spring.dozen.auth.application.dto.UserSignUpResponse;
+import com.spring.dozen.auth.application.exception.AuthErrorCode;
+import com.spring.dozen.auth.application.exception.AuthException;
 import com.spring.dozen.auth.application.service.AuthService;
 import com.spring.dozen.auth.presentation.dto.ApiResponse;
 import com.spring.dozen.auth.presentation.dto.UserSignInRequest;
@@ -21,14 +23,19 @@ public class AuthController {
 
     @PostMapping("/sign-up")
     public ApiResponse<UserSignUpResponse> signUp(@Valid @RequestBody UserSignUpRequest request) {
-        log.info("AuthController.SignUp.UserSignUpRequest: {}", request);
+        log.info("signUp.UserSignUpRequest: {}", request);
         return ApiResponse.success(authService.signUp(request.toServiceDto()));
     }
 
-    @PostMapping("/sign-in")
-    public ApiResponse<String> signIn(@RequestBody UserSignInRequest request) {
-        log.info("AuthController.signIn.UserSignInRequest: {}", request);
-        return ApiResponse.success(authService.signIn(request.toServiceDto()));
+    @PostMapping("/sign-up/hub-manager")
+    public ApiResponse<UserSignUpResponse> signUpForHubManager(@Valid @RequestBody UserSignUpRequest request,
+                                                               @RequestHeader(value = "X-User-Id", required = true) String userId,
+                                                               @RequestHeader(value = "X-Role", required = true) String role) {
+        log.info("signUpForHubManager.UserSignUpRequest: {}, RequestHeader.userId: {}, RequestHeader.role: {}", request, userId, role);
+        if (!"MASTER".equals(role)) {
+            throw new AuthException(AuthErrorCode.FORBIDDEN_ACCESS);
+        }
+        return ApiResponse.success(authService.signUpForHubManager(request.toServiceDto()));
     }
 
     /**
@@ -37,8 +44,14 @@ public class AuthController {
      */
     @GetMapping("/verify/{userId}")
     public ResponseEntity<Boolean> verifyUser(@PathVariable("userId") Long userId) {
-        log.info("AuthController.verifyUser userId : {}", userId);
+        log.info("verifyUser userId : {}", userId);
         return ResponseEntity.ok(authService.verifyUser(userId));
+    }
+
+    @PostMapping("/sign-in")
+    public ApiResponse<String> signIn(@RequestBody UserSignInRequest request) {
+        log.info("signIn.UserSignInRequest: {}", request);
+        return ApiResponse.success(authService.signIn(request.toServiceDto()));
     }
 
 }
