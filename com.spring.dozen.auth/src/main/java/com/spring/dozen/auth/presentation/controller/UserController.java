@@ -30,4 +30,16 @@ public class UserController {
         }
         return ApiResponse.success(userService.updateUser(userId, request.toServiceDto()));
     }
+
+    @DeleteMapping("/{userId}")
+    public ApiResponse<Void> deleteUser(@PathVariable("userId") Long userId,
+                                           @RequestHeader(value = "X-User-Id", required = true) String requestUserId,
+                                           @RequestHeader(value = "X-Role", required = true) String role) {
+        log.info("deleteUser.userId: {}, RequestHeader.userId: {}, RequestHeader.role: {}", userId, requestUserId, role);
+        if (!"MASTER".equals(role)) {
+            throw new AuthException(AuthErrorCode.FORBIDDEN_ACCESS);
+        }
+        userService.deleteUser(userId, Long.parseLong(requestUserId));
+        return ApiResponse.success();
+    }
 }

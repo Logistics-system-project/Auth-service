@@ -52,4 +52,8 @@ public abstract class BaseEntity {
         this.deletedAt = LocalDateTime.now();
         this.deletedBy = String.valueOf(userId);
     }
+
+    public boolean isDeleted() {
+        return isDeleted;
+    }
 }

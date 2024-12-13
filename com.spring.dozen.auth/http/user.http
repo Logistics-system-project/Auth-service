@@ -46,3 +46,8 @@ Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJ1c2VyX2lkIjoxMCwicm9sZSI6Ik1BU1RFU
   "password": "New1234!",
   "slackId": "new@slack.com"
 }
+
+### 회원 정보 삭제 - MASTER 권한 필요
+DELETE localhost:19091/api/users/2
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJ1c2VyX2lkIjoxMCwicm9sZSI6Ik1BU1RFUiIsImlzcyI6ImF1dGgtc2VydmljZSIsImlhdCI6MTczNDA3NDY4NCwiZXhwIjoxNzM0MDc4Mjg0fQ.Ia--LYN0MfVGV92Eb1QgsrhxykQnD_SA8VHQCNbH7v9C1HSb2rlKHoDPY83qxV0grFRWyhHkTcPnCnzGERFbWA

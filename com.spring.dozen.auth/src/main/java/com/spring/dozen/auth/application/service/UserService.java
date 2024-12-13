@@ -36,9 +36,13 @@ public class UserService {
     @Transactional
     public void deleteUser(Long userId, Long requestUserId) {
         // requestUserId 는 MASTER 의 ID 밖에 들어올 수 없습니다. 삭제는 MASTER 만 가능해서
-        log.info("deleteUser.userId: {}, requsetUserId: {}", userId, requestUserId);
+        log.info("deleteUser.userId: {}, requestUserId: {}", userId, requestUserId);
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new AuthException(AuthErrorCode.USER_NOT_FOUND));
+        // 이미 삭제된 유저는 예외 발생
+        if (user.getIsDeleted() != null && user.getIsDeleted()) {
+            throw new AuthException(AuthErrorCode.ALREADY_DELETED);
+        }
         user.deleteBase(requestUserId);
     }
 }

@@ -100,4 +100,27 @@ class UserServiceTest {
                 .isInstanceOf(AuthException.class)
                 .hasMessage("일치하는 유저 정보가 존재하지 않습니다.");
     }
+
+    @Test
+    @DisplayName("이미 삭제된 회원 삭제 시 예외가 발생해야 한다")
+    void deleteAlreadyDeletedUserTest() {
+        // given
+        User user = User.create(
+                "testUser",
+                "Pass123!",
+                "slackId",
+                Role.HUB_DELIVERY_STAFF
+        );
+        User savedUser = userRepository.save(user);
+        Long masterUserId = 1L;
+
+        // 첫 번째 삭제
+        userService.deleteUser(savedUser.getId(), masterUserId);
+
+        // when & then
+        // 두 번째 삭제 시도
+        assertThatThrownBy(() -> userService.deleteUser(savedUser.getId(), masterUserId))
+                .isInstanceOf(AuthException.class)
+                .hasMessage("이미 삭제된 유저입니다.");
+    }
 }
