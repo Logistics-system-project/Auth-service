@@ -54,6 +54,11 @@ public class User extends BaseEntity {
     public static User create(String username, String password, String slackId, Role role) {
         return create(username, password, slackId, role, false);
     }
+
+    public void update(String password, String slackId) {
+        this.password = password;
+        this.slackId = slackId;
+    }
 }
 
 
