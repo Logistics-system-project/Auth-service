@@ -19,7 +19,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 /**
  * @Value로 주입받는 값들은 ReflectionTestUtils를 사용해 직접 설정할 수 있습니다
- * */
+ */
 @ExtendWith(MockitoExtension.class)
 class JwtTokenProviderTest {
 
@@ -38,7 +38,7 @@ class JwtTokenProviderTest {
     @DisplayName("JWT 토큰 생성 테스트")
     void createAccessTokenTest() {
         // given
-        String userId = "testUser";
+        Long userId = 1L;
         Role role = Role.HUB_DELIVERY_STAFF;
 
         // when
@@ -53,7 +53,7 @@ class JwtTokenProviderTest {
                 .parseSignedClaims(token)
                 .getPayload();
 
-        assertThat(claims.get("user_id")).isEqualTo(userId);
+        assertThat(claims.get("user_id", Long.class)).isEqualTo(userId);
         assertThat(claims.get("role")).isEqualTo(role.name());
         assertThat(claims.getIssuer()).isEqualTo("auth-service");
     }

@@ -10,26 +10,28 @@ Content-Type: application/json
   "role": "COMPANY_DELIVERY_STAFF"
 }
 
+### 회원가입: HUB_MANAGER
 
-### 회원가입: MASTER 시도 - 실패
-POST localhost:19091/api/auth/sign-up
+POST localhost:19091/api/auth/sign-up/hub-manager
 Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJ1c2VyX2lkIjoxMCwicm9sZSI6Ik1BU1RFUiIsImlzcyI6ImF1dGgtc2VydmljZSIsImlhdCI6MTczNDAwMDM2MywiZXhwIjoxNzM0MDAzOTYzfQ.Q_5qCW1UfbVneUrNBN3zsBTfXuxTVGMFj1dKfd6qu7zLNmNhmTgL99cgFa5OhX72kcNnn1XIxxSJm6eIvXYhKQ
 
 {
-  "username": "masstaff2",
-  "password": "Pass1234!",
-  "slackId": "slackId@slack.com",
-  "role": "MASTER"
-}
-
-### 회원가입: HUB_MANAGER 시도 - 실패
-POST localhost:19091/api/auth/sign-up
-Content-Type: application/json
-
-{
-  "username": "manstaff2",
+  "username": "hubman2",
   "password": "Pass1234!",
   "slackId": "slackId@slack.com",
   "role": "HUB_MANAGER"
 }
 
+### 로그인
+POST localhost:19091/api/auth/sign-in
+Content-Type: application/json
+
+{
+  "username": "master",
+  "password": "Pass1234!"
+}
+
+### 회원 존재 여부 검증
+GET localhost:19091/api/auth/verify/999
+Content-Type: application/json

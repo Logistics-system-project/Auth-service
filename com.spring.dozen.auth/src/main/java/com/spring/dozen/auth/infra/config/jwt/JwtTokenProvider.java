@@ -2,12 +2,11 @@ package com.spring.dozen.auth.infra.config.jwt;
 
 import com.spring.dozen.auth.application.interfaces.TokenProvider;
 import com.spring.dozen.auth.domain.enums.Role;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.stereotype.Component;
-
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Component;
 
 import javax.crypto.SecretKey;
 import java.util.Date;
@@ -28,7 +27,7 @@ public class JwtTokenProvider implements TokenProvider {
     }
 
     @Override
-    public String createAccessToken(String userId, Role role) {
+    public String createAccessToken(Long userId, Role role) {
         return Jwts.builder()
                 .claim("user_id", userId)
                 .claim("role", role.name())
