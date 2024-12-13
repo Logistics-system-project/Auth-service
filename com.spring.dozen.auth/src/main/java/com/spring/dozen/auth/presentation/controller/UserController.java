@@ -1,0 +1,33 @@
+package com.spring.dozen.auth.presentation.controller;
+
+import com.spring.dozen.auth.application.dto.UserUpdateResponse;
+import com.spring.dozen.auth.application.exception.AuthErrorCode;
+import com.spring.dozen.auth.application.exception.AuthException;
+import com.spring.dozen.auth.application.service.UserService;
+import com.spring.dozen.auth.presentation.dto.ApiResponse;
+import com.spring.dozen.auth.presentation.dto.UserUpdateRequest;
+import jakarta.validation.Valid;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.web.bind.annotation.*;
+
+@Slf4j
+@RequiredArgsConstructor
+@RequestMapping("/api/users")
+@RestController
+public class UserController {
+
+    private final UserService userService;
+
+    @PutMapping("/{userId}")
+    public ApiResponse<UserUpdateResponse> updateUser(@PathVariable("userId") Long userId,
+                                                      @Valid @RequestBody UserUpdateRequest request,
+                                                      @RequestHeader(value = "X-User-Id", required = true) String requestUserId,
+                                                      @RequestHeader(value = "X-Role", required = true) String role) {
+        log.info("updateUser.UserSignUpRequest: {}, userId: {}, RequestHeader.userId: {}, RequestHeader.role: {}", request, userId, requestUserId, role);
+        if (!"MASTER".equals(role)) {
+            throw new AuthException(AuthErrorCode.FORBIDDEN_ACCESS);
+        }
+        return ApiResponse.success(userService.updateUser(userId, request.toServiceDto()));
+    }
+}

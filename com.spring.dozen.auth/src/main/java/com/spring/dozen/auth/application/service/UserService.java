@@ -24,7 +24,9 @@ public class UserService {
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
 
+    @Transactional
     public UserUpdateResponse updateUser(Long userId, UserUpdate updateRequest) {
+        log.info("updateUser.userId: {}, UserUpdate: {}", userId, updateRequest);
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new AuthException(AuthErrorCode.USER_NOT_FOUND));
         user.update(passwordEncoder.encode(updateRequest.password()), updateRequest.slackId());

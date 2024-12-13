@@ -35,3 +35,14 @@ Content-Type: application/json
 ### 회원 존재 여부 검증
 GET localhost:19091/api/auth/verify/999
 Content-Type: application/json
+
+
+### 회원 정보 수정 - MASTER 권한 필요
+PUT localhost:19091/api/users/1
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJ1c2VyX2lkIjoxMCwicm9sZSI6Ik1BU1RFUiIsImlzcyI6ImF1dGgtc2VydmljZSIsImlhdCI6MTczNDA2MDQ2NCwiZXhwIjoxNzM0MDY0MDY0fQ.p10mnWI6Jei5ptx06Eaz2jeOy89H75SpP-PORFFwI2M1ggDY27_TWavMX31LHdSCKe-U-HMaAyU78YNGpy7hHg
+
+{
+  "password": "New1234!",
+  "slackId": "new@slack.com"
+}
