@@ -31,26 +31,47 @@ class RoleTest {
         assertThat(result).isNull();
     }
 
-    @DisplayName("MASTER, HUB_MANAGER 권한은 사용할 수 없는 권한이다")
+    @DisplayName("isNotDeliveryStaffRole()은 MASTER, HUB_MANAGER 권한의 경우 true를 리턴한다.")
     @ParameterizedTest
     @ValueSource(strings = {"MASTER", "HUB_MANAGER"})
-    void isNotAvailableRole_ReturnsTrueForForbiddenRoles(String input) {
+    void isNotDeliveryStaffRole_ReturnsTrueForForbiddenRoles(String input) {
         // given
         Role role = Role.of(input);
 
         // when & then
-        assertThat(role.isNotAvailableRole()).isTrue();
+        assertThat(role.isNotDeliveryStaffRole()).isTrue();
     }
 
-    @DisplayName("HUB_DELIVERY_STAFF, COMPANY_DELIVERY_STAFF 권한은 사용할 수 있는 권한이다")
+    @DisplayName("isNotDeliveryStaffRole()은 HUB_DELIVERY_STAFF, COMPANY_DELIVERY_STAFF 권한의 경우 false를 리턴한다.")
     @ParameterizedTest
     @ValueSource(strings = {"HUB_DELIVERY_STAFF", "COMPANY_DELIVERY_STAFF"})
-    void isNotAvailableRole_ReturnsFalseForAllowedRoles(String input) {
+    void isNotDeliveryStaffRole_ReturnsFalseForAllowedRoles(String input) {
         // given
         Role role = Role.of(input);
 
         // when & then
-        assertThat(role.isNotAvailableRole()).isFalse();
+        assertThat(role.isNotDeliveryStaffRole()).isFalse();
     }
 
+    @DisplayName("isNotHubManager()은 HUB_MANAGER가 아닌 권한들은 true를 반환한다")
+    @ParameterizedTest
+    @ValueSource(strings = {"MASTER", "HUB_DELIVERY_STAFF", "COMPANY_DELIVERY_STAFF"})
+    void isNotHubManager_ReturnsTrueForNonHubManagerRoles(String input) {
+        // given
+        Role role = Role.of(input);
+
+        // when & then
+        assertThat(role.isNotHubManager()).isTrue();
+    }
+
+    @DisplayName("isNotHubManager()은 HUB_MANAGER 권한의 경우 false를 반환한다")
+    @ParameterizedTest
+    @ValueSource(strings = {"HUB_MANAGER"})
+    void isNotHubManager_ReturnsFalseForHubManagerRole(String input) {
+        // given
+        Role role = Role.of(input);
+
+        // when & then
+        assertThat(role.isNotHubManager()).isFalse();
+    }
 }

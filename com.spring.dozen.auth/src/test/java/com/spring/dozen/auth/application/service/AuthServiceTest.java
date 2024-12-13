@@ -1,5 +1,6 @@
 package com.spring.dozen.auth.application.service;
 
+import com.spring.dozen.auth.application.dto.UserSignIn;
 import com.spring.dozen.auth.application.dto.UserSignUp;
 import com.spring.dozen.auth.application.dto.UserSignUpResponse;
 import com.spring.dozen.auth.application.exception.AuthException;
@@ -137,5 +138,96 @@ class AuthServiceTest {
                 .hasMessage("접근 권한이 존재하지 않습니다.");
     }
 
+    @Test
+    @DisplayName("로그인 성공")
+    void signIn_Success() {
+        // given
+        String username = "testuser";
+        String password = "password123";
+        UserSignUp signUpRequest = new UserSignUp(
+                username,
+                password,
+                "slackId123",
+                "COMPANY_DELIVERY_STAFF"
+        );
+        authService.signUp(signUpRequest);
+
+        UserSignIn signInRequest = new UserSignIn(username, password);
+
+        // when
+        String token = authService.signIn(signInRequest);
+
+        // then
+        assertThat(token).isNotNull();
+        assertThat(token).isNotEmpty();
+    }
+
+    @Test
+    @DisplayName("로그인 실패 - 존재하지 않는 사용자")
+    void signIn_UserNotFound_ThrowsException() {
+        // given
+        UserSignIn signInRequest = new UserSignIn("nonexistent", "password123");
+
+        // when & then
+        assertThatThrownBy(() -> authService.signIn(signInRequest))
+                .isInstanceOf(AuthException.class)
+                .hasMessage("일치하는 유저 정보가 존재하지 않습니다.");
+    }
+
+    @Test
+    @DisplayName("로그인 실패 - 잘못된 비밀번호")
+    void signIn_InvalidPassword_ThrowsException() {
+        // given
+        String username = "testuser";
+        String password = "password123";
+        String wrongPassword = "wrongpassword";
+
+        UserSignUp signUpRequest = new UserSignUp(
+                username,
+                password,
+                "slackId123",
+                "COMPANY_DELIVERY_STAFF"
+        );
+        authService.signUp(signUpRequest);
+
+        UserSignIn signInRequest = new UserSignIn(username, wrongPassword);
+
+        // when & then
+        assertThatThrownBy(() -> authService.signIn(signInRequest))
+                .isInstanceOf(AuthException.class)
+                .hasMessage("유저 ID 또는 비밀번호 정보가 일치하지 않습니다.");
+    }
+
+    @Test
+    @DisplayName("회원 존재 여부 검증 - 성공")
+    void verifyUser_Success() {
+        // given
+        UserSignUp request = new UserSignUp(
+                "testuser",
+                "password123",
+                "slackId123",
+                "COMPANY_DELIVERY_STAFF"
+        );
+        UserSignUpResponse response = authService.signUp(request);
+
+        // when
+        Boolean result = authService.verifyUser(response.userId());
+
+        // then
+        assertThat(result).isTrue();
+    }
+
+    @Test
+    @DisplayName("회원 존재 여부 검증 실패 - 존재하지 않는 회원")
+    void verifyUser_UserNotFound() {
+        // given
+        Long nonExistentUserId = 999L;
+
+        // when
+        Boolean result = authService.verifyUser(nonExistentUserId);
+
+        // then
+        assertThat(result).isFalse();
+    }
 
 }
