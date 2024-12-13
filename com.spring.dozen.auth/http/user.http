@@ -4,7 +4,7 @@ POST localhost:19091/api/auth/sign-up
 Content-Type: application/json
 
 {
-  "username": "comstaff2",
+  "username": "comstaff3",
   "password": "Pass1234!",
   "slackId": "slackId@slack.com",
   "role": "COMPANY_DELIVERY_STAFF"
@@ -14,10 +14,10 @@ Content-Type: application/json
 
 POST localhost:19091/api/auth/sign-up/hub-manager
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJ1c2VyX2lkIjoxMCwicm9sZSI6Ik1BU1RFUiIsImlzcyI6ImF1dGgtc2VydmljZSIsImlhdCI6MTczNDAwMDM2MywiZXhwIjoxNzM0MDAzOTYzfQ.Q_5qCW1UfbVneUrNBN3zsBTfXuxTVGMFj1dKfd6qu7zLNmNhmTgL99cgFa5OhX72kcNnn1XIxxSJm6eIvXYhKQ
+Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJ1c2VyX2lkIjoxMCwicm9sZSI6Ik1BU1RFUiIsImlzcyI6ImF1dGgtc2VydmljZSIsImlhdCI6MTczNDA2MDQ2NCwiZXhwIjoxNzM0MDY0MDY0fQ.p10mnWI6Jei5ptx06Eaz2jeOy89H75SpP-PORFFwI2M1ggDY27_TWavMX31LHdSCKe-U-HMaAyU78YNGpy7hHg
 
 {
-  "username": "hubman2",
+  "username": "hubman6",
   "password": "Pass1234!",
   "slackId": "slackId@slack.com",
   "role": "HUB_MANAGER"
