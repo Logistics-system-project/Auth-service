@@ -1,11 +1,10 @@
 package com.spring.dozen.auth.domain.entity;
 
 import com.spring.dozen.auth.domain.enums.Role;
-import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
-import static org.assertj.core.api.Assertions.*;
+import static org.assertj.core.api.Assertions.assertThat;
 
 
 class UserTest {
@@ -35,5 +34,33 @@ class UserTest {
         assertThat(user.getUsername()).isEqualTo("testUser");
         assertThat(user.getRole()).isEqualTo(Role.HUB_DELIVERY_STAFF);
     }
+
+    @Test
+    @DisplayName("회원 삭제 시 삭제 관련 필드들이 정상적으로 변경되어야 한다")
+    void deleteBaseTest() {
+        // given
+        User user = User.create(
+                "testUser",
+                "password",
+                "slackId",
+                Role.HUB_DELIVERY_STAFF
+        );
+        Long deletedById = 1L;
+
+        // when
+        user.deleteBase(deletedById);
+
+        // then
+        assertThat(user.getIsDeleted()).isTrue();
+        assertThat(user.getDeletedBy()).isEqualTo(String.valueOf(deletedById));
+        assertThat(user.getDeletedAt()).isNotNull();
+
+        // 다른 필드들은 변경되지 않았는지 검증
+        assertThat(user.getUsername()).isEqualTo("testUser");
+        assertThat(user.getPassword()).isEqualTo("password");
+        assertThat(user.getSlackId()).isEqualTo("slackId");
+        assertThat(user.getRole()).isEqualTo(Role.HUB_DELIVERY_STAFF);
+    }
+
 
 }

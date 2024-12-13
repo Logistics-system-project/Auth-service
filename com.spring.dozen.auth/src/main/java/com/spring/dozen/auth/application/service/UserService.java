@@ -32,4 +32,13 @@ public class UserService {
         user.update(passwordEncoder.encode(updateRequest.password()), updateRequest.slackId());
         return UserUpdateResponse.from(user);
     }
+
+    @Transactional
+    public void deleteUser(Long userId, Long requestUserId) {
+        // requestUserId 는 MASTER 의 ID 밖에 들어올 수 없습니다. 삭제는 MASTER 만 가능해서
+        log.info("deleteUser.userId: {}, requsetUserId: {}", userId, requestUserId);
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new AuthException(AuthErrorCode.USER_NOT_FOUND));
+        user.deleteBase(requestUserId);
+    }
 }
