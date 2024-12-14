@@ -16,7 +16,8 @@ public enum AuthErrorCode {
     USER_NOT_FOUND(HttpStatus.NOT_FOUND, "일치하는 유저 정보가 존재하지 않습니다."),
     DUPLICATE_USERNAME(HttpStatus.CONFLICT, "유저 이름이 이미 존재합니다."),
 
-    UNSUPPORTED_ROLE(HttpStatus.NOT_FOUND, "존재하지 않는 권한 이름입니다.");
+    UNSUPPORTED_ROLE(HttpStatus.NOT_FOUND, "존재하지 않는 권한 이름입니다."),
+    ALREADY_DELETED(HttpStatus.CONFLICT, "이미 삭제된 유저입니다.");
 
 
     private final HttpStatus httpStatus;
