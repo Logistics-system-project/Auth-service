@@ -32,7 +32,8 @@ public class AuthConfig {
                 // 요청에 대한 접근 권한을 설정합니다.
                 .authorizeRequests(authorize -> authorize
                         // /api/auth로 시작하는 모든 요청에 대해 접근을 허용합니다.
-                        .requestMatchers("/api/auth/**").permitAll()
+//                        .requestMatchers("/api/auth/**").permitAll()
+                                .requestMatchers("/api/**").permitAll()
                         // 그 외의 모든 요청은 인증이 필요합니다.
                         .anyRequest().authenticated()
                 )
