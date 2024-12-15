@@ -6,6 +6,7 @@ import com.spring.dozen.auth.application.dto.UserUpdateResponse;
 import com.spring.dozen.auth.application.exception.AuthErrorCode;
 import com.spring.dozen.auth.application.exception.AuthException;
 import com.spring.dozen.auth.domain.entity.User;
+import com.spring.dozen.auth.domain.entity.Users;
 import com.spring.dozen.auth.domain.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -56,18 +57,14 @@ public class UserService {
     public UserSlackIdsResponse getUsersForSlack(Long senderUserId, Long receiverUserId) {
         log.info("getUsersForSlack senderUserId: {}, receiverUserId: {}", senderUserId, receiverUserId);
 
-        List<User> users = userRepository.findByIdIn(List.of(senderUserId, receiverUserId));
-        if (users.size() <= 1) throw new AuthException(AuthErrorCode.USER_NOT_FOUND);
-        String senderSlackId = users.stream()
-                .filter(user -> user.getId().equals(senderUserId))
-                .findFirst()
-                .map(User::getSlackId)
+        // 일급 컬렉션 적용
+        Users users = new Users(userRepository.findByIdIn(List.of(senderUserId, receiverUserId)));
+        if(users.hasNotEnoughUsers()) {
+            throw new AuthException(AuthErrorCode.USER_NOT_FOUND);
+        }
+        String senderSlackId = users.getSlackIdById(senderUserId)
                 .orElseThrow(() -> new AuthException(AuthErrorCode.SENDER_NOT_FOUND));
-
-        String receiverSlackId = users.stream()
-                .filter(user -> user.getId().equals(receiverUserId))
-                .findFirst()
-                .map(User::getSlackId)
+        String receiverSlackId = users.getSlackIdById(receiverUserId)
                 .orElseThrow(() -> new AuthException(AuthErrorCode.RECEIVER_NOT_FOUND));
         return UserSlackIdsResponse.of(senderUserId, senderSlackId, receiverUserId, receiverSlackId);
     }
