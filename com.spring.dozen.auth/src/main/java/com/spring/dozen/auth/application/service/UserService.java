@@ -1,5 +1,6 @@
 package com.spring.dozen.auth.application.service;
 
+import com.spring.dozen.auth.application.dto.UserSlackIdsResponse;
 import com.spring.dozen.auth.application.dto.UserUpdate;
 import com.spring.dozen.auth.application.dto.UserUpdateResponse;
 import com.spring.dozen.auth.application.exception.AuthErrorCode;
@@ -11,6 +12,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
 
 /**
  * 유저 조회, 수정, 삭제
@@ -44,5 +47,17 @@ public class UserService {
             throw new AuthException(AuthErrorCode.ALREADY_DELETED);
         }
         user.deleteBase(requestUserId);
+    }
+
+    /**
+     *
+     * 슬랙 메시지를 보내기 위한 발신자, 수신자 정보를 조회
+     */
+    public UserSlackIdsResponse getUsersForSlack(Long senderUserId, Long receiverUserId) {
+        log.info("getUsersForSlack senderUserId: {}, receiverUserId: {}", senderUserId, receiverUserId);
+
+        List<User> users = userRepository.findByIdIn(List.of(senderUserId, receiverUserId));
+        if (users.size() <= 1) throw new AuthException(AuthErrorCode.USER_NOT_FOUND);
+        return UserSlackIdsResponse.of(senderUserId, receiverUserId, users);
     }
 }

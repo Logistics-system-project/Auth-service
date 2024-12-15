@@ -51,3 +51,8 @@ Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJ1c2VyX2lkIjoxMCwicm9sZSI6Ik1BU1RFU
 DELETE localhost:19091/api/users/2
 Content-Type: application/json
 Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJ1c2VyX2lkIjoxMCwicm9sZSI6Ik1BU1RFUiIsImlzcyI6ImF1dGgtc2VydmljZSIsImlhdCI6MTczNDA3NDY4NCwiZXhwIjoxNzM0MDc4Mjg0fQ.Ia--LYN0MfVGV92Eb1QgsrhxykQnD_SA8VHQCNbH7v9C1HSb2rlKHoDPY83qxV0grFRWyhHkTcPnCnzGERFbWA
+
+### 슬랙메시지를 위한 발신자, 수신자 정보
+GET localhost:19091/api/users/slack-ids?senderId=1&receiverId=2
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJ1c2VyX2lkIjoxMCwicm9sZSI6Ik1BU1RFUiIsImlzcyI6ImF1dGgtc2VydmljZSIsImlhdCI6MTczNDIyNzg4NSwiZXhwIjoxNzM0MjMxNDg1fQ.Be3udoaIByk-5zdIBhKqff-4P3kps35_UhteIMXzFGNBPH5wtlcxgkWY_pBIPfpcVu1VrtgcZr3kB5kU835B0Q
