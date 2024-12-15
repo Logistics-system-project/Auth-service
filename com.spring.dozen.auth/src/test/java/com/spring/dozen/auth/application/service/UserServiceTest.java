@@ -1,5 +1,6 @@
 package com.spring.dozen.auth.application.service;
 
+import com.spring.dozen.auth.application.dto.UserSlackIdsResponse;
 import com.spring.dozen.auth.application.dto.UserUpdate;
 import com.spring.dozen.auth.application.dto.UserUpdateResponse;
 import com.spring.dozen.auth.application.exception.AuthException;
@@ -122,5 +123,52 @@ class UserServiceTest {
         assertThatThrownBy(() -> userService.deleteUser(savedUser.getId(), masterUserId))
                 .isInstanceOf(AuthException.class)
                 .hasMessage("이미 삭제된 유저입니다.");
+    }
+
+    @Test
+    @DisplayName("발신자와 수신자 정보를 정상적으로 조회해야 한다")
+    void getUsersForSlackTest() {
+        // given
+        User sender = User.create("sender", "Pass123!", "senderSlackId", Role.HUB_DELIVERY_STAFF);
+        User receiver = User.create("receiver", "Pass123!", "receiverSlackId", Role.HUB_DELIVERY_STAFF);
+        userRepository.save(sender);
+        userRepository.save(receiver);
+
+        // when
+        UserSlackIdsResponse response = userService.getUsersForSlack(sender.getId(), receiver.getId());
+
+        // then
+        assertThat(response.senderUserId()).isEqualTo(sender.getId());
+        assertThat(response.senderSlackId()).isEqualTo(sender.getSlackId());
+        assertThat(response.receiverUserId()).isEqualTo(receiver.getId());
+        assertThat(response.receiverSlackId()).isEqualTo(receiver.getSlackId());
+    }
+
+    @Test
+    @DisplayName("발신자가 존재하지 않을 경우 예외가 발생해야 한다")
+    void getUsersForSlack_SenderNotFound() {
+        // given
+        User receiver = User.create("receiver", "Pass123!", "receiverSlackId", Role.HUB_DELIVERY_STAFF);
+        userRepository.save(receiver);
+        Long wrongUserId = 999L;
+
+        // when & then
+        assertThatThrownBy(() -> userService.getUsersForSlack(wrongUserId, receiver.getId()))
+                .isInstanceOf(AuthException.class)
+                .hasMessage("일치하는 유저 정보가 존재하지 않습니다.");
+    }
+
+    @Test
+    @DisplayName("수신자가 존재하지 않을 경우 예외가 발생해야 한다")
+    void getUsersForSlack_ReceiverNotFound() {
+        // given
+        User sender = User.create("sender", "Pass123!", "senderSlackId", Role.HUB_DELIVERY_STAFF);
+        userRepository.save(sender);
+        Long wrongUserId = 999L;
+
+        // when & then
+        assertThatThrownBy(() -> userService.getUsersForSlack(sender.getId(), wrongUserId))
+                .isInstanceOf(AuthException.class)
+                .hasMessage("일치하는 유저 정보가 존재하지 않습니다.");
     }
 }

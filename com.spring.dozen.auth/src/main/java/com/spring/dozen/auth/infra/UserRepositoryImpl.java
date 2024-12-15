@@ -4,6 +4,7 @@ import com.spring.dozen.auth.domain.entity.User;
 import com.spring.dozen.auth.domain.repository.UserRepository;
 import org.springframework.data.jpa.repository.JpaRepository;
 
+import java.util.List;
 import java.util.Optional;
 
 /**
@@ -14,4 +15,6 @@ import java.util.Optional;
 public interface UserRepositoryImpl extends JpaRepository<User, Long>, UserRepository {
 
     Optional<User> findByUsername(String username);
+
+    List<User> findByIdIn(List<Long> ids);
 }
