@@ -1,5 +1,6 @@
 package com.spring.dozen.auth.domain.entity;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
@@ -21,12 +22,11 @@ public class Users {
     }
 
     public List<User> getUsers() {
-        // return new ArrayList<>(users);
-        return Collections.unmodifiableList(this.users);
+//        return Collections.unmodifiableList(this.users);
+        return new ArrayList<>(users);
     }
 
-    // 메소드 명으로 hasNotEnoughUsers()? hasNotBothSenderAndReceiver()?
-    public boolean hasNotEnoughUsers() {
+    public boolean hasNotBothSenderAndReceiver() {
         return users.size() <= 1;
 
     }

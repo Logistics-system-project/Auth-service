@@ -59,7 +59,7 @@ public class UserService {
 
         // 일급 컬렉션 적용
         Users users = Users.from(userRepository.findByIdIn(List.of(senderUserId, receiverUserId)));
-        if(users.hasNotEnoughUsers()) {
+        if(users.hasNotBothSenderAndReceiver()) {
             throw new AuthException(AuthErrorCode.USER_NOT_FOUND);
         }
         String senderSlackId = users.getSlackIdById(senderUserId)
