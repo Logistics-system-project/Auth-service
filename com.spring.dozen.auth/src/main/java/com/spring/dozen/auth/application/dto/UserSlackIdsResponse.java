@@ -32,4 +32,14 @@ public record UserSlackIdsResponse(
                 receiverSlackId
         );
     }
+
+    public static UserSlackIdsResponse of(Long senderUserId, String senderSlackId,
+                                          Long receiverUserId, String receiverSlackId) {
+        return new UserSlackIdsResponse(
+                senderUserId,
+                senderSlackId,
+                receiverUserId,
+                receiverSlackId
+        );
+    }
 }

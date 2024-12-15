@@ -58,6 +58,17 @@ public class UserService {
 
         List<User> users = userRepository.findByIdIn(List.of(senderUserId, receiverUserId));
         if (users.size() <= 1) throw new AuthException(AuthErrorCode.USER_NOT_FOUND);
-        return UserSlackIdsResponse.of(senderUserId, receiverUserId, users);
+        String senderSlackId = users.stream()
+                .filter(user -> user.getId().equals(senderUserId))
+                .findFirst()
+                .map(User::getSlackId)
+                .orElseThrow(() -> new AuthException(AuthErrorCode.SENDER_NOT_FOUND));
+
+        String receiverSlackId = users.stream()
+                .filter(user -> user.getId().equals(receiverUserId))
+                .findFirst()
+                .map(User::getSlackId)
+                .orElseThrow(() -> new AuthException(AuthErrorCode.RECEIVER_NOT_FOUND));
+        return UserSlackIdsResponse.of(senderUserId, senderSlackId, receiverUserId, receiverSlackId);
     }
 }
