@@ -12,11 +12,16 @@ public class Users {
 
     private final List<User> users;
 
-    public Users(List<User> users) {
+    private Users(List<User> users) {
         this.users = Collections.unmodifiableList(users);
     }
 
+    public static Users from(List<User> users) {
+        return new Users(users);
+    }
+
     public List<User> getUsers() {
+        // return new ArrayList<>(users);
         return Collections.unmodifiableList(this.users);
     }
 

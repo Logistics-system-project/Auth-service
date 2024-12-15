@@ -58,7 +58,7 @@ public class UserService {
         log.info("getUsersForSlack senderUserId: {}, receiverUserId: {}", senderUserId, receiverUserId);
 
         // 일급 컬렉션 적용
-        Users users = new Users(userRepository.findByIdIn(List.of(senderUserId, receiverUserId)));
+        Users users = Users.from(userRepository.findByIdIn(List.of(senderUserId, receiverUserId)));
         if(users.hasNotEnoughUsers()) {
             throw new AuthException(AuthErrorCode.USER_NOT_FOUND);
         }
